@@ -46,20 +46,29 @@ Test how things work!
 # Apply LayerNorm to the tokens
 normalized_tokens = layer_norm(tokens)
 print("Before LN:\n", tokens, '\n')
-print("After LN:\n", normalized_tokens)
+print("After LN:\n", normalized_tokens, '\n')
 
+
+
+"""
+Step 5
+Let's try implementing our own LN layer!
+Follow the following steps.
+    1. Normalize the tokens individually
+        - Normalizing means to change the distribution of the data to a standard normal distribution
+        - Where (mean = 0, variance = 1)
+    2. Multiply the result with gamma and add beta
+"""
+# 1. Normalize the tokens individually
 x= tokens
-print(x)
-mean = x.mean(-1, keepdim=True)
+mean = x.mean(-1, keepdim=True) # calculate the mean of the tokens individually
+print("mean:\n", mean, '\n')
 
-var = x.var(-1, unbiased=False, keepdim=True) # -1 is the last dimension
-print(mean, '\n', var)
-out = (x - mean)/torch.sqrt(var+1e-12)
-print(out)
-out = gamma*out + beta
-print(out)
-# Output the result
-#print("Original Tokens:",tokens.shape,'\n', tokens, '\n\n')
-print("Normalized Tokens:\n", normalized_tokens)
+var = x.var(-1, unbiased=False, keepdim=True) #unbiased=False option is for calculating the sample variance
+print("variance\n", var, '\n')
 
-#print("Normalized Tokens:\n", out)
+norm_data = (x - mean)/torch.sqrt(var + 1e-12) # 1e-12 is the epsilon value
+
+# 2. Multiply the normalized data with gamma and add beta
+out = gamma*norm_data + beta
+print("Custom LN:\n", out)
