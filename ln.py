@@ -17,7 +17,7 @@ import torch.nn as nn
 Step 2
 Initialize the tokens
 """
-input_data = torch.tensor([[[0.1, -0.2], [0.3, 0.4], [-0.5, -0.6], [0.7, 0.8]]])
+tokens = torch.tensor([[[1.0, 0.0], [2.0, 0.0], [4.0, 1.0], [5.0, 1.0]]])
 num_batch, num_tokens, dim = input_data.shape
 
 
@@ -25,22 +25,26 @@ num_batch, num_tokens, dim = input_data.shape
 Step 3
 Define the LN layer
 """
-# normalized_shape is the input shape from the last dimension onwards that will be normalized.
+# normalized_shape is the input shape from the last dimension that will be normalized.
 layer_norm = nn.LayerNorm(normalized_shape=dim) 
 
 
-# Optionally, set custom gamma (scale) and beta (shift) parameters
-# Here, both gamma and beta are of shape (2,) as our last dimension is of size 2
-gamma = torch.randn(dim)
-beta = torch.randn(dim)
+# Manually set gamma (weight) and beta (bias) parameters
+gamma = torch.tensor([1.0, 1.5])
+beta = torch.tensor([0.0, 0.7])
 
-# Manually set the weights and biases
+# Set the weights and biases
 layer_norm.weight = nn.Parameter(gamma)
 layer_norm.bias = nn.Parameter(beta)
 
+
+"""
+Step 4
+Test how things work!
+"""
 # Apply LayerNorm to the tokens
 normalized_tokens = layer_norm(tokens)
 
 # Output the result
-print("Original Tokens:\n", tokens)
+print("Original Tokens:\n", tokens, '\n\n')
 print("Normalized Tokens:\n", normalized_tokens)
