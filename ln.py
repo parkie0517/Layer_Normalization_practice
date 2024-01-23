@@ -18,7 +18,7 @@ Step 2
 Initialize the tokens
 """
 tokens = torch.tensor([[[1.0, 0.0], [2.0, 0.0], [4.0, 1.0], [5.0, 1.0]]])
-num_batch, num_tokens, dim = input_data.shape
+num_batch, num_tokens, dim = tokens.shape
 
 
 """
