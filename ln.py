@@ -1,6 +1,6 @@
 """
 Welcome to Layer Normalization (LN) practice
-By running this code, you will learn how the LN works.
+By following this code, you will learn how the LN works.
 Let's begin!
 """
 
@@ -16,22 +16,23 @@ import torch.nn as nn
 """
 Step 2
 Initialize the tokens
+The token will have a shape like this -> (1, 2, 4)
+Where, (1, 2, 4) = (number of samples in a mini-batch, number of tokens, embedding size of the token)
 """
-tokens = torch.tensor([[[1.0, 0.0], [2.0, 0.0], [4.0, 1.0], [5.0, 1.0]]])
-num_batch, num_tokens, dim = tokens.shape
+tokens = torch.tensor([[[3.0, -4.0, -1.0, 2.0],[3.0, 0.0, 5.0, 4.0]]])
+num_batch, num_tokens, embedding_dim = tokens.shape
+print("Token shape\n"+ f"({num_batch}, {num_tokens}, {embedding_dim})")
 
 
 """
 Step 3
 Define the LN layer
 """
-# normalized_shape is the input shape from the last dimension that will be normalized.
-layer_norm = nn.LayerNorm(normalized_shape=dim) 
-
+layer_norm = nn.LayerNorm(normalized_shape=embedding_dim) # normalized_shape should be set to embedding size
 
 # Manually set gamma (weight) and beta (bias) parameters
-gamma = torch.tensor([1.0, 1.5])
-beta = torch.tensor([0.0, 0.7])
+gamma = torch.tensor([1.0, 1.0, 1.0, 1.0], requires_grad=True)
+beta = torch.tensor([0.0, 0.0, 0.0, 0.0], requires_grad=True)
 
 # Set the weights and biases
 layer_norm.weight = nn.Parameter(gamma)
@@ -44,7 +45,21 @@ Test how things work!
 """
 # Apply LayerNorm to the tokens
 normalized_tokens = layer_norm(tokens)
+print("Before LN:\n", tokens, '\n')
+print("After LN:\n", normalized_tokens)
 
+x= tokens
+print(x)
+mean = x.mean(-1, keepdim=True)
+
+var = x.var(-1, unbiased=False, keepdim=True) # -1 is the last dimension
+print(mean, '\n', var)
+out = (x - mean)/torch.sqrt(var+1e-12)
+print(out)
+out = gamma*out + beta
+print(out)
 # Output the result
-print("Original Tokens:\n", tokens, '\n\n')
+#print("Original Tokens:",tokens.shape,'\n', tokens, '\n\n')
 print("Normalized Tokens:\n", normalized_tokens)
+
+#print("Normalized Tokens:\n", out)
