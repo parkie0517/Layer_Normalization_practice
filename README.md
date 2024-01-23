@@ -3,7 +3,7 @@ Understanding how Layer Normalization works using PyTorch!
 
 ## Instructions
 1. Simply run the "ln.py" file by typing "python ln.py"
-2. Read the comments in the "ln.py" file and try understand how LN works!
+2. Read the comments in the "ln.py" file and try understanding how LN works!
 
 ## Screenshots
 ![image](https://github.com/parkie0517/Layer_Normalization_practice/assets/80407632/a3dbcd50-a043-49fa-aaef-158d4dd1e6c6)  
